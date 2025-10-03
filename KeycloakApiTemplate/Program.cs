@@ -10,17 +10,17 @@ builder.Services.AddKeycloakAuthentication(builder.Configuration);
 builder.Services.AddDatabase(configuration);
 builder.Services.AddHttpClient("oidc");
 builder.Services.AddControllers();
-builder.Services.AddOpenApi();
+builder.Services.AddSwaggerGen();
 builder.Services.AddCors(CorsPolicyName);
 
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/openapi/v1.json", "OpenAPI v1");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "My API v1");
     });
 }
 
