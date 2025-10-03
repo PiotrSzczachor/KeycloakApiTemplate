@@ -10,7 +10,8 @@ namespace KeycloakApiTemplate.Controllers
     [Route("user")]
     public class UserController : Controller
     {
-        [HttpGet("info")]
+        [HttpGet("info", Name ="GetUserInfo")]
+        [ProducesResponseType(typeof(AuthInfo), StatusCodes.Status200OK)]
         public IActionResult Me()
         {
             var guid = User.Claims

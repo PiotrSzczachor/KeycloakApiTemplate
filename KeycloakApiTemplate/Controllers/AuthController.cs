@@ -17,14 +17,14 @@ namespace KeycloakApiTemplate.Controllers
         }
 
 
-        [HttpGet("login")]
+        [HttpGet("login", Name = "Login")]
         public IActionResult Login(string? returnUrl = "/")
         {
             return Challenge(new AuthenticationProperties { RedirectUri = returnUrl }, OpenIdConnectDefaults.AuthenticationScheme);
         }
 
 
-        [HttpGet("logout")]
+        [HttpGet("logout", Name = "Logout")]
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
