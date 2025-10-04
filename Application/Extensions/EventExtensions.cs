@@ -20,6 +20,8 @@ namespace Application.Extensions
 
             return new EventDto(
                 Guid: e.Guid,
+                Title: e.Title,
+                Description: e.Description,
                 OrganizationGuid: e.OrganizationGuid,
                 OrganizationName: e.Organization?.User?.Name,
                 StartDate: e.StartDate,

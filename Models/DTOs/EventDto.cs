@@ -4,6 +4,8 @@
        Guid Guid,
        Guid? OrganizationGuid,
        string? OrganizationName,
+       string? Title,
+       string? Description,
        DateTime? StartDate,
        DateTime? EndDate,
        Guid? AddressGuid,
