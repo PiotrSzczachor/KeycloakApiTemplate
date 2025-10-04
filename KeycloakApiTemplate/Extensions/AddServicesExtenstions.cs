@@ -11,6 +11,7 @@ namespace KeycloakApiTemplate.Extensions
                 .AddScoped<IUsersService, UsersService>()
                 .AddScoped<IEventsService, EventsService>()
                 .AddScoped<IOrganizationsService, OrganizationsService>()
+                .AddScoped<CertificateService>()
                 .AddScoped<ISchoolsService, SchoolsService>();
         }
     }

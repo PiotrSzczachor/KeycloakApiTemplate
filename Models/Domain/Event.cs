@@ -6,6 +6,8 @@ namespace Models.Domain
         {
                 public Guid Guid { get; set; }
                 public Guid? OrganizationGuid { get; set; }
+                public string? Title { get; set; }
+                public string? Description { get; set; }
                 [JsonIgnore]
                 public Organization? Organization { get; set; }
                 public DateTime? StartDate { get; set; }
