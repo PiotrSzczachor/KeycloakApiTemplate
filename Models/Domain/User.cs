@@ -10,6 +10,7 @@ namespace Models.Domain
                 public string Email { get; set; }
                 public string Phone { get; set; }
                 public DateTime DateOfBirth { get; set; }
+                public bool IsAdult { get; set; }
                 public string Role { get; set; }
                 public Guid? SchoolGuid { get; set; }
                 [JsonIgnore]

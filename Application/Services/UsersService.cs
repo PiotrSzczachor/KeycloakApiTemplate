@@ -29,7 +29,19 @@ namespace Application.Services
                     .FirstOrDefaultAsync(u => u.Guid == keycloakId);
 
                 if (user != null)
+                {
+                    if(!user.IsAdult)
+                    {
+                        if (IsAdult(user.DateOfBirth))
+                        {
+                            user.IsAdult = true;
+                            _dbContext.Users.Update(user);
+                            await transaction.CommitAsync();
+                        }
+                    }
                     return user.Guid;
+                }
+                    
 
                 var newUser = new User
                 {
@@ -39,7 +51,8 @@ namespace Application.Services
                     Email = email,
                     Phone = phoneNumber,
                     DateOfBirth = dateOfBirth,
-                    Role = role
+                    Role = role,
+                    IsAdult = IsAdult(dateOfBirth)
                 };
 
                 switch (role)
@@ -69,6 +82,24 @@ namespace Application.Services
                 await transaction.RollbackAsync();
                 throw;
             }
+        }
+
+        private static bool IsAdult(DateTime dateOfBirth)
+        {
+            // Get today's date
+            DateTime today = DateTime.Today;
+
+            // Calculate age
+            int age = today.Year - dateOfBirth.Year;
+
+            // Adjust if the birthday hasn't occurred yet this year
+            if (dateOfBirth.Date > today.AddYears(-age))
+            {
+                age--;
+            }
+
+            // Adult if age is 18 or older
+            return age >= 18;
         }
     }
 }
