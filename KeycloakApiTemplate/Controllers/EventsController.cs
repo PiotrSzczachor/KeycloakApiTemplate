@@ -17,11 +17,11 @@ namespace KeycloakApiTemplate.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ICollection<EventDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllEvents()
         {
             var offers = await _eventsService.GetAllEventsAsync();
-            return Ok();
+            return Ok(offers);
         }
 
         [HttpGet("organizer/{organizerId:guid}")]
