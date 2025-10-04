@@ -18,7 +18,7 @@ namespace Application.Services
             _organizationsService = organizationsService;
         }
 
-        public async Task<Guid> GetOrCreateAsync(Guid keycloakId, string name, string surname, string email, string role)
+        public async Task<Guid> GetOrCreateAsync(Guid keycloakId, string name, string surname, string email, string phoneNumber, DateTime dateOfBirth, string role)
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
@@ -37,6 +37,9 @@ namespace Application.Services
                     Name = name,
                     Surname = surname,
                     Email = email,
+                    Phone = phoneNumber,
+                    DateOfBirth = dateOfBirth,
+                    Role = role
                 };
 
                 switch (role)

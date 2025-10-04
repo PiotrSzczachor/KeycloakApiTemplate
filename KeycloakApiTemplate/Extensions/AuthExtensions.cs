@@ -80,9 +80,11 @@
                     var email = claims.First(x => x.Type == ClaimTypes.Email).Value;
                     var role = claims.First(x => x.Type == ClaimTypes.Role).Value;
                     var phoneNumber = claims.First(x => x.Type == ClaimTypes.MobilePhone).Value;
-                    var datebirth = claims.First(x => x.Type == ClaimTypes.DateOfBirth).Value;
+                    var dateOfBirth = claims.First(x => x.Type == ClaimTypes.DateOfBirth).Value;
+                    DateTime convertedDate = DateTime.SpecifyKind(DateTime.ParseExact(dateOfBirth, "yyyy-MM-dd",
+                                       System.Globalization.CultureInfo.InvariantCulture), DateTimeKind.Utc);
 
-                    await usersService.GetOrCreateAsync(guid, name, surname, email, role);
+                    await usersService.GetOrCreateAsync(guid, name, surname, email, phoneNumber, convertedDate, role);
                 };
             });
 
