@@ -3,6 +3,7 @@ using System;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251004165259_AutoGenerateSchoolsAndOrganizationsGuid")]
+    partial class AutoGenerateSchoolsAndOrganizationsGuid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,7 +87,6 @@ namespace Data.Migrations
             modelBuilder.Entity("Models.Domain.Organization", b =>
                 {
                     b.Property<Guid>("Guid")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("AddressGuid")
@@ -110,10 +112,9 @@ namespace Data.Migrations
             modelBuilder.Entity("Models.Domain.School", b =>
                 {
                     b.Property<Guid>("Guid")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("AddressGuid")
+                    b.Property<Guid>("AddressGuid")
                         .HasColumnType("uuid");
 
                     b.Property<string>("Name")
@@ -232,7 +233,8 @@ namespace Data.Migrations
                     b.HasOne("Models.Domain.Address", "Address")
                         .WithOne()
                         .HasForeignKey("Models.Domain.School", "AddressGuid")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.SetNull)
+                        .IsRequired();
 
                     b.Navigation("Address");
                 });

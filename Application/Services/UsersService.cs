@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using Data;
 using Microsoft.EntityFrameworkCore;
+using Models.Auth;
 using Models.Domain;
 
 namespace Application.Services
@@ -8,32 +9,63 @@ namespace Application.Services
     public sealed class UsersService : IUsersService
     {
         private readonly AppDbContext _dbContext;
-        public UsersService(AppDbContext dbContext)
+        private readonly ISchoolsService _schoolsService;
+        private readonly IOrganizationsService _organizationsService;
+        public UsersService(AppDbContext dbContext, ISchoolsService schoolsService, IOrganizationsService organizationsService)
         {
             _dbContext = dbContext;
+            _schoolsService = schoolsService;
+            _organizationsService = organizationsService;
         }
 
-        public async Task<Guid> GetOrCreateAsync(Guid keycloakId, string name, string surname, string email)
+        public async Task<Guid> GetOrCreateAsync(Guid keycloakId, string name, string surname, string email, string role)
         {
-            var user = await _dbContext.Users
-                .AsNoTracking()
-                .FirstOrDefaultAsync(u => u.Guid == keycloakId);
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-            if (user != null)
-                return user.Guid;
-
-            var newUser = new User
+            try
             {
-                Guid = keycloakId,
-                Name = name,
-                Surname = surname,
-                Email = email
-            };
+                var user = await _dbContext.Users
+                    .AsNoTracking()
+                    .FirstOrDefaultAsync(u => u.Guid == keycloakId);
 
-            _dbContext.Users.Add(newUser);
-            await _dbContext.SaveChangesAsync();
+                if (user != null)
+                    return user.Guid;
 
-            return newUser.Guid;
+                var newUser = new User
+                {
+                    Guid = keycloakId,
+                    Name = name,
+                    Surname = surname,
+                    Email = email,
+                };
+
+                switch (role)
+                {
+                    case Roles.Coordinator:
+                        {
+                            var schoolGuid = await _schoolsService.CreateAsync(name);
+                            newUser.SchoolGuid = schoolGuid;
+                            break;
+                        }
+                    case Roles.Organization:
+                        {
+                            var organizationGuid = await _organizationsService.CreateAsync(name);
+                            newUser.OrganizationGuid = organizationGuid;
+                            break;
+                        }
+                }
+
+                _dbContext.Users.Add(newUser);
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+                return newUser.Guid;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
     }
 }

@@ -8,7 +8,9 @@ namespace KeycloakApiTemplate.Extensions
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             return services
-                .AddScoped<IUsersService, UsersService>();
+                .AddScoped<IUsersService, UsersService>()
+                .AddScoped<IOrganizationsService, OrganizationsService>()
+                .AddScoped<ISchoolsService, SchoolsService>();
         }
     }
 }

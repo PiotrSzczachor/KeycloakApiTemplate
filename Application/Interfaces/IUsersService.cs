@@ -2,6 +2,6 @@
 {
     public interface IUsersService
     {
-        Task<Guid> GetOrCreateAsync(Guid keycloakId, string name, string surname, string email); 
+        Task<Guid> GetOrCreateAsync(Guid keycloakId, string name, string surname, string email, string role); 
     }
 }
