@@ -13,6 +13,11 @@ namespace Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new UserEventConfiguration());
+            modelBuilder.ApplyConfiguration(new AddressConfiguration());
+            modelBuilder.ApplyConfiguration(new EventConfiguration());
+            modelBuilder.ApplyConfiguration(new SchoolConfiguration());
+            modelBuilder.ApplyConfiguration(new OrganizationConfiguration());
             base.OnModelCreating(modelBuilder);
         }
     }
