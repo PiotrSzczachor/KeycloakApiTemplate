@@ -1,4 +1,6 @@
 using KeycloakApiTemplate.Extensions;
+using Microsoft.Extensions.DependencyInjection;
+using Models.Profiles;
 
 const string CorsPolicyName = "AllowSwaggerAndFrontend";
 
@@ -11,7 +13,18 @@ builder.Services.AddDatabase(configuration);
 builder.Services.AddHttpClient("oidc");
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile<UserMappingProfile>();
+    cfg.AddProfile<EventMappingProfile>();
+});
+
 builder.Services.AddCors(CorsPolicyName);
+
+
+
+
 
 var app = builder.Build();
 

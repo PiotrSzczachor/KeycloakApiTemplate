@@ -1,4 +1,6 @@
-﻿namespace Models.Domain
+﻿using System.Text.Json.Serialization;
+
+namespace Models.Domain
 {
     public sealed class User
     {
@@ -10,9 +12,12 @@
         public DateTime DateOfBirth { get; set; }
         public string Role { get; set; }
         public Guid? SchoolGuid { get; set; }
+        [JsonIgnore]
         public School School { get; set; }
         public Guid? OrganizationGuid { get; set; }
+        [JsonIgnore]
         public Organization Organization { get; set; }
+        [JsonIgnore]
         public ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
 
     }

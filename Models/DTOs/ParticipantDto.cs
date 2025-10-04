@@ -1,8 +1,10 @@
 ﻿namespace Models.DTOs
 {
-    public class ParticipantDto
-    {
-        public string? Name { get; set; }
-        public string? Surname { get; set; }
-    }
+    public sealed record ParticipantDto(
+        Guid Guid,
+        string Name,
+        string? Surname,
+        string Email,
+        string Phone
+    );
 }

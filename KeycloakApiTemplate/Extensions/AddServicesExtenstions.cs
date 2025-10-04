@@ -9,7 +9,8 @@ namespace KeycloakApiTemplate.Extensions
         {
             return services
                 .AddScoped<IUsersService, UsersService>()
-                .AddScoped<IEventsService, EventsService>();
+                .AddScoped<IEventsService, EventsService>()
+            ;
         }
     }
 }
