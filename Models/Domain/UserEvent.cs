@@ -1,9 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using Models.DTOs;
+using System.Text.Json.Serialization;
 
 namespace Models.Domain
 {
     public class UserEvent
     {
+        public ParticipantEventStatus? ParticipantEventStatus { get; set; }
         public Guid? UserGuid {  get; set; }
         [JsonIgnore]
         public User? User { get; set; }

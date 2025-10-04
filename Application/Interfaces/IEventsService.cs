@@ -10,5 +10,7 @@ namespace Application.Interfaces
         Task<EventDto> CreateEventAsync(Event @event);
         Task<EventDto> UpdateEventAsync(Event @event);
         Task<EventDto> GetEventDetailsAsync(Guid eventId);
+        Task<bool> AssignUserToEventAsync(PatchUserStatusEventDto dto);
+        Task<bool> UpdateUserStatusAsync(PatchUserStatusEventDto dto);
     }
 }

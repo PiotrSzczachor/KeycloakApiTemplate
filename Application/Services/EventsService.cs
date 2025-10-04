@@ -80,6 +80,51 @@ namespace Application.Services
             return @event.ToDto();
         }
 
+        public async Task<bool> AssignUserToEventAsync(PatchUserStatusEventDto dto)
+        {
+            var ev = await _context.Events
+                .Include(e => e.UserEvents)
+                .FirstOrDefaultAsync(e => e.Guid == dto.EventId && !e.Closed);
+
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Guid == dto.UserId);
+
+            if (ev == null || user == null)
+                return false;
+
+            var userEvent = ev.UserEvents.FirstOrDefault(ue => ue.UserGuid == dto.UserId);
+            if (userEvent != null)
+            {
+                userEvent.ParticipantEventStatus = dto.ParticipantEventStatus;
+            }
+            else
+            {
+                userEvent = new UserEvent
+                {
+                    UserGuid = dto.UserId,
+                    EventGuid = dto.EventId,
+                    ParticipantEventStatus = dto.ParticipantEventStatus
+                };
+                _context.UsersEvents.Add(userEvent);
+            }
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UpdateUserStatusAsync(PatchUserStatusEventDto dto)
+        {
+            var userEvent = await _context.UsersEvents
+                .FirstOrDefaultAsync(ue => ue.EventGuid == dto.EventId && ue.UserGuid == dto.UserId);
+
+            if (userEvent == null)
+                return false;
+
+            userEvent.ParticipantEventStatus = dto.ParticipantEventStatus;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
 
     }
 }

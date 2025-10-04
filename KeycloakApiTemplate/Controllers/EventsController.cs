@@ -65,5 +65,29 @@ namespace KeycloakApiTemplate.Controllers
             var createdEvent = await _eventsService.UpdateEventAsync(eventDto);
             return Ok();
         }
+
+        [HttpPatch]
+        [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
+        public async Task<IActionResult> AssignUserToEvent([FromBody] PatchUserStatusEventDto dto)
+        {
+            var success = await _eventsService.AssignUserToEventAsync(dto);
+
+            if (!success)
+                return NotFound("Event or User not found.");
+
+            return Ok("User successfully assigned to event.");
+        }
+
+        [HttpPatch("{eventId}/status/{status}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<IActionResult> AssignOrUpdateUserStatus([FromBody] PatchUserStatusEventDto dto)
+        {
+            var success = await _eventsService.UpdateUserStatusAsync(dto);
+
+            if (!success)
+                return NotFound("Event or UserEvent not found.");
+
+            return Ok("Status updated successfully.");
+        }
     }
 }
