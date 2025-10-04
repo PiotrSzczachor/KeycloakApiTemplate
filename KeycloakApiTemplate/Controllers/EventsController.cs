@@ -66,7 +66,7 @@ namespace KeycloakApiTemplate.Controllers
             return Ok();
         }
 
-        [HttpPatch]
+        [HttpPatch("assign")]
         [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
         public async Task<IActionResult> AssignUserToEvent([FromBody] PatchUserStatusEventDto dto)
         {
