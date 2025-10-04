@@ -5,6 +5,9 @@ using Models.DTOs;
 
 namespace KeycloakApiTemplate.Controllers
 {
+    [ApiController]
+    //[Authorize]
+    [Route("address")]
     public class AddressController : Controller
     {
         private readonly IAddressesService _addressesService;
