@@ -2,6 +2,7 @@
 {
     public class Organization
     {
+        public string? Name { get; set; }
         public Guid Guid { get; set; }
         public required Guid UserGuid { get; set; }
         public required User User { get; set; }
