@@ -7,7 +7,7 @@ using Models.DTOs;
 namespace KeycloakApiTemplate.Controllers
 {
     [ApiController]
-    [Authorize]
+    //[Authorize]
     [Route("events")]
     public class EventsController : Controller
     {

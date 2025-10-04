@@ -1,5 +1,5 @@
-﻿using Application.Interfaces;
-using AutoMapper;
+﻿using Application.Extensions;
+using Application.Interfaces;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Models.Domain;
@@ -10,11 +10,9 @@ namespace Application.Services
     public sealed class EventsService : IEventsService
     {
         private readonly AppDbContext _context;
-        private readonly IMapper _mapper;
-        public EventsService(AppDbContext context, IMapper mapper)
+        public EventsService(AppDbContext context)
         {
             _context = context;
-            _mapper = mapper;
         }
 
         public async Task<List<EventDto>> GetAllEventsAsync()
@@ -25,7 +23,7 @@ namespace Application.Services
                 .Include(e => e.UserEvents).ThenInclude(ue => ue.User)
                 .ToListAsync();
 
-            return _mapper.Map<List<EventDto>>(events);
+            return events.Select(e => e.ToDto()).ToList();
         }
 
 
@@ -33,7 +31,7 @@ namespace Application.Services
         {
             _context.Events.Add(@event);
             await _context.SaveChangesAsync();
-            return _mapper.Map<EventDto>(@event);
+            return @event.ToDto();
         }
 
         public async Task<EventDto> UpdateEventAsync(Event @event)
@@ -54,7 +52,7 @@ namespace Application.Services
 
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<EventDto>(existing);
+            return @event.ToDto();
         }
 
 
