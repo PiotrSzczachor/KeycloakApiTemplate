@@ -10,9 +10,6 @@ namespace Models.Configurations
         {
             builder.HasKey(u => u.Guid);
 
-            builder.Property(u => u.Guid)
-                   .ValueGeneratedNever();
-
             builder.HasOne(u => u.User)
                 .WithOne()
                 .HasForeignKey<Organization>(u => u.UserGuid)

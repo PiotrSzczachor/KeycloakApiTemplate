@@ -78,8 +78,11 @@
                     var name = claims.First(x => x.Type == ClaimTypes.GivenName).Value;
                     var surname = claims.First(x => x.Type == ClaimTypes.Surname).Value;
                     var email = claims.First(x => x.Type == ClaimTypes.Email).Value;
+                    var role = claims.First(x => x.Type == ClaimTypes.Role).Value;
+                    var phoneNumber = claims.First(x => x.Type == ClaimTypes.MobilePhone).Value;
+                    var datebirth = claims.First(x => x.Type == ClaimTypes.DateOfBirth).Value;
 
-                    await usersService.GetOrCreateAsync(guid, name, surname, email);
+                    await usersService.GetOrCreateAsync(guid, name, surname, email, role);
                 };
             });
 

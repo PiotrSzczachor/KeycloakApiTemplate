@@ -10,10 +10,10 @@ namespace Data
 
         public DbSet<User> Users { get; set; } = default!;
         public DbSet<Event> Events { get; set; } = default!;
-        public DbSet<Event> Addresses { get; set; } = default!;
-        public DbSet<Event> Schools { get; set; } = default!;
-        public DbSet<Event> Organizations { get; set; } = default!;
-        public DbSet<Event> UsersEvents { get; set; } = default!;
+        public DbSet<Address> Addresses { get; set; } = default!;
+        public DbSet<School> Schools { get; set; } = default!;
+        public DbSet<Organization> Organizations { get; set; } = default!;
+        public DbSet<UserEvent> UsersEvents { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
