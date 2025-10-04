@@ -19,6 +19,11 @@ namespace Models.Configurations
                 .WithOne()
                 .HasForeignKey<Organization>(u => u.AddressGuid)
                 .OnDelete(DeleteBehavior.SetNull);
+
+
+            builder.HasMany(u => u.Events)
+                   .WithOne(ue => ue.Organization)
+                   .HasForeignKey(ue => ue.OrganizationGuid);
         }
     }
 }

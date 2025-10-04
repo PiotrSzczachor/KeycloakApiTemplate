@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using Microsoft.Extensions.Logging;
+using System.Text.Json.Serialization;
 
 namespace Models.Domain
 {
@@ -12,6 +13,8 @@ namespace Models.Domain
                 public Guid? AddressGuid { get; set; }
                 [JsonIgnore]
                 public Address? Address { get; set; }
-        }
+                [JsonIgnore]
+                public ICollection<Event> Events { get; set; } = new List<Event>();
+    }
 
 }

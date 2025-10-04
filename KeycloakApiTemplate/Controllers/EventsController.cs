@@ -19,11 +19,33 @@ namespace KeycloakApiTemplate.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllOffers()
+        public async Task<IActionResult> GetAllEvents()
         {
             var offers = await _eventsService.GetAllEventsAsync();
             return Ok();
         }
+
+        [HttpGet("organizer/{organizerId:guid}")]
+        [ProducesResponseType(typeof(List<EventDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetOrganizerEvents(Guid organizerId)
+        {
+            var events = await _eventsService.GetOrganizerEventsAsync(organizerId);
+            return Ok(events);
+        }
+
+        [HttpGet("{eventId:guid}")]
+        [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetEventDetails(Guid eventId)
+        {
+            var eventDetails = await _eventsService.GetEventDetailsAsync(eventId);
+
+            if (eventDetails is null)
+                return NotFound($"Event with ID {eventId} not found.");
+
+            return Ok(eventDetails);
+        }
+
 
         [HttpPost]
         [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]

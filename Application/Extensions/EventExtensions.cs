@@ -7,6 +7,16 @@ namespace Application.Extensions
     {
         public static EventDto ToDto(this Event e)
         {
+            var participants = e.UserEvents?
+                .Select(ue => new ParticipantDto(
+                    Guid: ue.User.Guid,
+                    Name: ue.User.Name,
+                    Surname: ue.User.Surname,
+                    Email: ue.User.Email,
+                    Phone: ue.User.Phone
+                ))
+                .ToList() ?? new List<ParticipantDto>();
+
             return new EventDto(
                 Guid: e.Guid,
                 OrganizationGuid: e.OrganizationGuid,

@@ -6,7 +6,9 @@ namespace Application.Interfaces
     public interface IEventsService
     {
         Task<List<EventDto>> GetAllEventsAsync();
+        Task<List<EventDto>> GetOrganizerEventsAsync(Guid organizerId);
         Task<EventDto> CreateEventAsync(Event @event);
         Task<EventDto> UpdateEventAsync(Event @event);
+        Task<EventDto> GetEventDetailsAsync(Guid eventId);
     }
 }

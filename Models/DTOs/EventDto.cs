@@ -10,6 +10,7 @@
        string? AddressCity,
        string? AddressStreet,
        string? Qualifications,
-       bool Closed
+       bool Closed,
+       List<ParticipantDto> Participants = null
    );
 }
