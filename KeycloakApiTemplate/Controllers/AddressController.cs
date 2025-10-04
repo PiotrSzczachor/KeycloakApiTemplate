@@ -35,7 +35,7 @@ namespace KeycloakApiTemplate.Controllers
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Address), StatusCodes.Status200OK)]
         public async Task<IActionResult> UpdateAddressAsync([FromBody] Address address)
         {
             var createdEvent = await _addressesService.UpdateAddressAsync(address);
