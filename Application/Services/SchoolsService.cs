@@ -1,8 +1,9 @@
-﻿using Application.Interfaces;
+﻿using Application.Extensions;
+using Application.Interfaces;
 using Data;
 using Microsoft.EntityFrameworkCore;
 using Models.Domain;
-using System.Xml.Linq;
+using Models.DTOs;
 
 namespace Application.Services
 {
@@ -25,5 +26,13 @@ namespace Application.Services
 
             return newSchool.Guid;
         }
+
+        public async Task<ICollection<StudentDto>> GetStudentsAsync(Guid guid)
+        {
+            var school = await _dbContext.Schools.Include(s => s.Users).FirstOrDefaultAsync(s => s.Guid == guid);
+            var schoolUsers = school?.Users.Select(u => u.ToStudentDto()).ToList();
+            return schoolUsers ?? new List<StudentDto>();
+        }
+
     }
 }
