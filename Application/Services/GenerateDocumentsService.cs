@@ -1,17 +1,17 @@
-﻿using Models.Domain;
+﻿using Application.Interfaces;
+using Models.Domain;
 using Models.DTOs;
 
 namespace Application.Services
 {
-    public class CertificateService
+    public class GenerateDocumentsService : IGenerateDocumentsService
     {
-        public string GenerateCertificateHtml(User user, Event ev, UserEvent userEvent)
+        public string GenerateCertificateHtml(ParticipantDto participant, EventDto @event)
         {
-            var eventDate = ev.StartDate?.ToString("dd.MM.yyyy") ?? "-";
-            var eventLocation = ev.Address != null
-                ? $"{ev.Address.Street}, {ev.Address.City}, {ev.Address.Region}, {ev.Address.PostalCode}"
-                : "-";
-            var organizerName = ev.Organization?.User?.Name ?? "Nieznany organizator";
+            var eventDate = @event.StartDate?.ToString("dd.MM.yyyy") ?? "-";
+            var eventLocation =$"{@event.AddressStreet}, {@event.AddressBuildingNumber} / {@event.AddressFlatNumber} , {@event.AddressCity}, {@event.PostalCode}"
+                ?? "-";
+            var organizerName = @event.OrganizationName;
             var currentDate = DateTime.UtcNow.ToString("dd.MM.yyyy");
 
             return $@"
@@ -296,7 +296,7 @@ namespace Application.Services
                 </div>
     
                 <div class='footer'>
-                    <p>Certyfikat wygenerowany online przez: <strong>{{organizerName}}</strong></p>
+                    <p>Certyfikat wygenerowany online przez: <strong>{{organizationName}}</strong></p>
                     <p>Data wydania: {{currentDate}}</p>
                 </div>
             </div>

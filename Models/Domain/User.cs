@@ -20,6 +20,5 @@ namespace Models.Domain
                 public Organization? Organization { get; set; }
                 [JsonIgnore]
                 public ICollection<UserEvent> UserEvents { get; set; } = new List<UserEvent>();
-
         }
 }
