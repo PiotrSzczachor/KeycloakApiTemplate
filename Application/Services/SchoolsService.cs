@@ -34,5 +34,15 @@ namespace Application.Services
             return schoolUsers ?? new List<StudentDto>();
         }
 
+        public async Task<ICollection<SchoolDto>> GetAllAsync()
+        {
+            return await _dbContext.Schools.Select(s => new SchoolDto(s.Guid, s.Name ?? "", s.AddressGuid ?? Guid.Empty)).ToListAsync();
+        }
+
+        public async Task<SchoolDto?> GetAsync(Guid guid)
+        {
+            return await _dbContext.Schools.Select(o => new SchoolDto(o.Guid, o.Name ?? "", o.AddressGuid ?? Guid.Empty)).FirstOrDefaultAsync(o => o.Guid == guid);
+        }
+
     }
 }

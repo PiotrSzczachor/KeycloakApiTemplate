@@ -6,5 +6,7 @@ namespace Application.Interfaces
     {
         Task<Guid> CreateAsync(string name);
         Task<ICollection<StudentDto>> GetStudentsAsync(Guid id);
+        Task<ICollection<StudentDto>> GetAsync(Guid id);
+        Task<ICollection<StudentDto>> GetAllAsync();
     }
 }
