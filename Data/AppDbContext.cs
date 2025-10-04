@@ -9,6 +9,11 @@ namespace Data
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; } = default!;
+        public DbSet<Event> Events { get; set; } = default!;
+        public DbSet<Event> Addresses { get; set; } = default!;
+        public DbSet<Event> Schools { get; set; } = default!;
+        public DbSet<Event> Organizations { get; set; } = default!;
+        public DbSet<Event> UsersEvents { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
