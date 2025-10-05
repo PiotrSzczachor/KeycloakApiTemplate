@@ -12,11 +12,11 @@ namespace Application.Services
         {
             _context = appDbContext;
         }
-        public async Task<Address> CreateAddressAsync(Address address)
+        public async Task<Guid> CreateAddressAsync(Address address)
         {
             _context.Addresses.Add(address);
             await _context.SaveChangesAsync();
-            return address;
+            return address.Guid ?? Guid.Empty;
         }
 
         public async Task<Address> GetAddressDetailsAsync(Guid addressId)

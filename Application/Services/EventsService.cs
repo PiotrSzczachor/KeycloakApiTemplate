@@ -11,6 +11,7 @@ namespace Application.Services
     public sealed class EventsService : IEventsService
     {
         private readonly AppDbContext _context;
+        private readonly IAddressesService _addressesService;
         public EventsService(AppDbContext context)
         {
             _context = context;
@@ -52,11 +53,19 @@ namespace Application.Services
             return ev.ToDto();
         }
 
-        public async Task<EventDto> CreateEventAsync(Event @event)
+        public async Task<Guid> CreateEventAsync(AddEventDto addEventDto, Guid userId)
         {
-            _context.Events.Add(@event);
+            var organization = _context.Organizations.Where(x => x.UserGuid == userId).FirstOrDefault();
+            if(organization  == null)
+            {
+                throw new InvalidDataException();
+            }
+            var address = new Address { City = addEventDto.AddressCity, BuildingNumber = addEventDto.AddressBuildingNumber, PostalCode = addEventDto.AddressPostalCode ?? "", Street = addEventDto.AddressStreet };
+            var addressGuid = await _addressesService.CreateAddressAsync(address);
+            var newEvent = new Event { OrganizationGuid = organization.Guid, AddressGuid = addressGuid, StartDate = addEventDto.StartDate, EndDate = addEventDto.EndDate, Description = addEventDto.Description, Title = addEventDto.Title };
+            _context.Events.Add(newEvent);
             await _context.SaveChangesAsync();
-            return @event.ToDto();
+            return newEvent.Guid;
         }
 
         public async Task<EventDto> UpdateEventAsync(Event @event)

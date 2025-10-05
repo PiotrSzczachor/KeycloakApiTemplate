@@ -7,7 +7,7 @@ namespace Application.Interfaces
     {
         Task<List<EventDto>> GetAllEventsAsync();
         Task<List<EventDto>> GetOrganizerEventsAsync(Guid organizerId);
-        Task<EventDto> CreateEventAsync(Event @event);
+        Task<Guid> CreateEventAsync(AddEventDto addEventDto, Guid organizationId);
         Task<EventDto> UpdateEventAsync(Event @event);
         Task<EventDto> GetEventDetailsAsync(Guid eventId);
         Task<bool> AssignUserToEventAsync(PatchUserStatusEventDto dto);

@@ -1,7 +1,10 @@
 ﻿using Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Models.Auth;
 using Models.Domain;
 using Models.DTOs;
+using System.Security.Claims;
 
 namespace KeycloakApiTemplate.Controllers
 {
@@ -17,7 +20,7 @@ namespace KeycloakApiTemplate.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ICollection<EventDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAllEvents()
         {
             var offers = await _eventsService.GetAllEventsAsync();
@@ -45,15 +48,23 @@ namespace KeycloakApiTemplate.Controllers
             return Ok(eventDetails);
         }
 
-
+        [Authorize]
         [HttpPost]
         [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
-        public async Task<IActionResult> CreateEvent([FromBody] Event eventDto)
+        public async Task<IActionResult> CreateEvent([FromBody] AddEventDto eventDto)
         {
             if (eventDto == null)
                 return BadRequest("Event data is required.");
 
-            var createdEvent = await _eventsService.CreateEventAsync(eventDto);
+            var claims = HttpContext.User.Claims;
+            var userGuid = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userRole = claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
+            if (userGuid == null || userRole == null || userRole != Roles.Organization)
+            {
+                return Forbid();
+            }
+
+            var createdEvent = await _eventsService.CreateEventAsync(eventDto, new Guid(userGuid));
 
             return Ok(createdEvent);
         }
