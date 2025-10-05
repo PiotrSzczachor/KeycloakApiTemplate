@@ -31,8 +31,21 @@ namespace KeycloakApiTemplate.Controllers
                 return NoContent();
             }
 
-            var certificateHtml = _certificationService.GenerateCertificateHtml(user, @event);
-            return Ok(certificateHtml);
+            var html = _certificationService.GenerateCertificateHtml(user, @event);
+            var pdfBytes = _certificationService.GenerateCertificatePdf(html);
+            return File(pdfBytes, "application/pdf", $"Certificate_{user.Name}_{user.Surname}.pdf");
+        }
+
+
+        [HttpGet("reports")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetReport([FromQuery] Guid userId, [FromQuery] DateTime startDate, [FromQuery] Guid endDate)
+        {
+            var @events = await _eventsService.GetAllEventsAsync();
+            var users = @events.Select(x => x.Participants.FirstOrDefault(x => x.Guid == userId)).ToList();
+            var html = _certificationService.GenerateReportHtml(users, @events);
+            var pdfBytes = _certificationService.GenerateCertificatePdf(html);
+            return File(pdfBytes, "application/pdf", $"Report{startDate}_{endDate}.pdf");
         }
 
     }

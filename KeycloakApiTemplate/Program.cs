@@ -1,3 +1,5 @@
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using KeycloakApiTemplate.Extensions;
 
 const string CorsPolicyName = "AllowSwaggerAndFrontend";
@@ -11,6 +13,7 @@ builder.Services.AddDatabase(configuration);
 builder.Services.AddHttpClient("oidc");
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
 builder.Services.AddCors(CorsPolicyName);
 
 var app = builder.Build();
