@@ -33,7 +33,8 @@ namespace Application.Extensions
                 PostalCode: e.Address?.PostalCode,
                 AddressFlatNumber: e.Address?.FlatNumber,
                 Qualifications: e.Qualifications,
-                Closed: e.Closed
+                Closed: e.Closed,
+                Participants: participants
             );
         }
     }

@@ -1,11 +1,18 @@
 ﻿using Application.Interfaces;
-using Models.Domain;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 using Models.DTOs;
 
 namespace Application.Services
 {
     public class GenerateDocumentsService : IGenerateDocumentsService
     {
+        private readonly IConverter _converter;
+
+        public GenerateDocumentsService(IConverter converter)
+        {
+            _converter = converter;
+        }
         public string GenerateCertificateHtml(ParticipantDto participant, EventDto @event)
         {
             var eventDate = @event.StartDate?.ToString("dd.MM.yyyy") ?? "-";
@@ -304,6 +311,25 @@ namespace Application.Services
     </body>
     </html>";
         }
+
+        public byte[] GenerateCertificatePdf(string html)
+        {
+            var doc = new HtmlToPdfDocument()
+            {
+                GlobalSettings = {
+                PaperSize = PaperKind.A4,
+                Orientation = Orientation.Portrait
+            },
+                Objects = {
+                new ObjectSettings {
+                    HtmlContent = html
+                }
+            }
+            };
+
+            return _converter.Convert(doc);
+        }
+
     }
 
 }

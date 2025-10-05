@@ -31,8 +31,9 @@ namespace KeycloakApiTemplate.Controllers
                 return NoContent();
             }
 
-            var certificateHtml = _certificationService.GenerateCertificateHtml(user, @event);
-            return Ok(certificateHtml);
+            var html = _certificationService.GenerateCertificateHtml(user, @event);
+            var pdfBytes = _certificationService.GenerateCertificatePdf(html);
+            return File(pdfBytes, "application/pdf", $"Certificate_{user.Name}_{user.Surname}.pdf");
         }
 
     }

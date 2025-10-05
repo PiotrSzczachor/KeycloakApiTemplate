@@ -6,5 +6,6 @@ namespace Application.Interfaces
     public interface IGenerateDocumentsService
     {
         string GenerateCertificateHtml(ParticipantDto participant, EventDto @event);
+        byte[] GenerateCertificatePdf(string html);
     }
 }
