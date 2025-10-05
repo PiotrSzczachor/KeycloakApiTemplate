@@ -63,7 +63,9 @@ namespace Application.Services
             }
             var address = new Address { City = addEventDto.AddressCity, BuildingNumber = addEventDto.AddressBuildingNumber, PostalCode = addEventDto.AddressPostalCode ?? "", Street = addEventDto.AddressStreet };
             var addressGuid = await _addressesService.CreateAddressAsync(address);
-            var newEvent = new Event { OrganizationGuid = organization.Guid, AddressGuid = addressGuid, StartDate = addEventDto.StartDate, EndDate = addEventDto.EndDate, Description = addEventDto.Description, Title = addEventDto.Title };
+            var utcStart = DateTime.SpecifyKind(addEventDto.StartDate ?? new DateTime(), DateTimeKind.Utc);
+            var utcEnd = DateTime.SpecifyKind(addEventDto.StartDate ?? new DateTime(), DateTimeKind.Utc);
+            var newEvent = new Event { OrganizationGuid = organization.Guid, AddressGuid = addressGuid, StartDate = utcStart, EndDate = utcEnd, Description = addEventDto.Description, Title = addEventDto.Title };
             _context.Events.Add(newEvent);
             await _context.SaveChangesAsync();
             return newEvent.Guid;
