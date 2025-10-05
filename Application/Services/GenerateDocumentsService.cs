@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
 using DinkToPdf;
 using DinkToPdf.Contracts;
+using Models.Domain;
 using Models.DTOs;
 
 namespace Application.Services
@@ -310,6 +311,97 @@ namespace Application.Services
         </div>
     </body>
     </html>";
+        }
+
+        public string GenerateReportHtml(List<ParticipantDto> participant, List<EventDto> @events)
+        {
+            var eventDate = @events.Select(x => x.StartDate?.ToString("dd.MM.yyyy") ?? "-");
+            var organizerName = @events.Select(x => x.OrganizationName);
+            var currentDate = DateTime.UtcNow.ToString("dd.MM.yyyy");
+
+            return $@"
+<!DOCTYPE html>
+<html lang=""pl"">
+<head>
+    <meta charset=""UTF-8"">
+    <title>Raport z wydarzenia wolontariackiego</title>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            line-height: 1.5;
+        }}
+        h1, h2 {{
+            color: #2c3e50;
+        }}
+        table {{
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }}
+        th, td {{
+            border: 1px solid #bdc3c7;
+            padding: 8px;
+            text-align: left;
+        }}
+        th {{
+            background-color: #ecf0f1;
+        }}
+        tr:nth-child(even) {{
+            background-color: #f9f9f9;
+        }}
+        .summary {{
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+        }}
+    </style>
+</head>
+<body>
+    <h1>Raport z wydarzenia wolontariackiego</h1>
+    <p><strong>Nazwa wydarzenia:</strong> {{{{EventName}}}}</p>
+    <p><strong>Data wydarzenia:</strong> {{{{EventDate}}}}</p>
+    <p><strong>Miejsce wydarzenia:</strong> {{{{EventPlace}}}}</p>
+    <p><strong>Organizator:</strong> {{{{Organizer}}}}</p>
+
+    <h2>Lista uczestników</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Lp.</th>
+                <th>Imię</th>
+                <th>Nazwisko</th>
+                <th>Data udziału</th>
+                <th>Godzina rozpoczęcia</th>
+                <th>Godzina zakończenia</th>
+                <th>Uwagi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Przykład użycia w foreach / template -->
+            {{{{#each Participants}}}}
+            <tr>
+                <td>{{{{@index}}}}</td>
+                <td>{{{{FirstName}}}}</td>
+                <td>{{{{LastName}}}}</td>
+                <td>{{{{ParticipationDate}}}}</td>
+                <td>{{{{StartTime}}}}</td>
+                <td>{{{{EndTime}}}}</td>
+                <td>{{{{Notes}}}}</td>
+            </tr>
+            {{{{/each}}}}
+        </tbody>
+    </table>
+
+    <div class=""summary"">
+        <p><strong>Podsumowanie:</strong></p>
+        <p>Liczba uczestników: {{{{TotalParticipants}}}}</p>
+        <p>Łączna liczba godzin wolontariatu: {{{{TotalHours}}}}</p>
+    </div>
+</body>
+</html>
+";
         }
 
         public byte[] GenerateCertificatePdf(string html)
