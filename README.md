@@ -10,13 +10,6 @@
 
 
 
-
-
-
----
----
----
-
 # 🏙️ Krakowskie Cyfrowe Centrum Wolontariatu (Krakow Digital Volunteer Center)
 
 ## 📚 Spis treści
@@ -273,6 +266,10 @@ Aplikacja wykorzystuje **Keycloak** jako centralny komponent uwierzytelniania i 
 - **Single Sign-On (SSO)** – jedno logowanie daje dostęp do całej platformy (frontend + backend). Token jest przechowywany w cookies
 - **Bezpieczne wylogowanie** – zakończenie sesji w Keycloak automatycznie unieważnia tokeny JWT.  
 - Po wylogowaniu, ciasteczka są automatycznie usuwane, co unieważnia sesję i token JWT.  
+
+## 9. Testowanie
+Zostały rozpoczęte prace nad testami w technologii Cyporess.
+Skupiliśmy się na testach e2e z możliwościa wprowadzenia testów jednostkowych z użyciem xUnit jak i przeporwadzeniem testów integracyjnych do skoordynowania pracy serwisow i kontrolerów.
 
 ## 10. Onboarding
 
