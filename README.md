@@ -29,8 +29,8 @@
 6. API (OpenAPI / Swagger)
 7. Uruchomienie lokalne
 8. Bezpieczeństwo i prywatność
-10. Testowanie
-12. Contributing / Onboarding
+9. Testowanie
+10. Contributing
 
 
 # 1. Opis projektu
@@ -255,7 +255,6 @@ Aplikacja wykorzystuje **Keycloak** jako centralny serwer uwierzytelniania i aut
 ## 8. Bezpieczeństwo i prywatność
 
 System Krakowskiego Cyfrowego Centrum Wolontariatu został zaprojektowany z myślą o **maksymalnym bezpieczeństwie danych użytkowników** oraz pełnej **zgodności z RODO**.  
-Priorytetem projektu jest ochrona informacji osobistych młodzieży, szkół i organizacji.
 
 ---
 
@@ -264,24 +263,25 @@ Priorytetem projektu jest ochrona informacji osobistych młodzieży, szkół i o
 Aplikacja wykorzystuje **Keycloak** jako centralny komponent uwierzytelniania i autoryzacji (IAM – *Identity and Access Management*).
 
 #### Główne funkcje integracji:
-- **OpenID Connect / OAuth2.0** – nowoczesne i bezpieczne protokoły autoryzacji.  
+- **OpenID** – protokoły autoryzacji.  
 - **Tokeny JWT (JSON Web Token)** – wszystkie żądania do API są weryfikowane przy użyciu podpisanych tokenów JWT.  
 - **Role i grupy** – dostęp do zasobów systemu jest kontrolowany na podstawie roli użytkownika:  
   - `Volunteer` – wolontariusz  
   - `Organization` – przedstawiciel organizacji  
   - `Coordinator` – szkolny koordynator wolontariatu  
   - `Admin` – administrator systemu  
-- **Single Sign-On (SSO)** – jedno logowanie daje dostęp do całej platformy (frontend + backend).  
+- **Single Sign-On (SSO)** – jedno logowanie daje dostęp do całej platformy (frontend + backend). Token jest przechowywany w cookies
 - **Bezpieczne wylogowanie** – zakończenie sesji w Keycloak automatycznie unieważnia tokeny JWT.  
-- **Obsługa polityk haseł** – wymuszenie silnych haseł, rotacji i wymiany tymczasowych haseł przy pierwszym logowaniu.
+- Po wylogowaniu, ciasteczka są automatycznie usuwane, co unieważnia sesję i token JWT.  
 
-#### 🔄 Odświeżanie tokenów
-Frontend (Angular 20) automatycznie odświeża token JWT przed jego wygaśnięciem, co zapewnia bezpieczeństwo sesji bez konieczności ponownego logowania użytkownika.
+## 10. Onboarding
 
-#### 🔏 Przechowywanie tokenów
-Tokeny JWT są przechowywane wyłącznie w **pamięci sesji przeglądarki (sessionStorage)**, dzięki czemu nie są dostępne dla innych aplikacji ani skryptów.
-
-
+1. Skopiuj repozytorium na swój lokalny komputer.
+2. Skonfiguruj Keycloak i PostgreSQL zgodnie z plikami konfiguracyjnymi.
+3. Uruchom backend (`dotnet run`) - repozytorium KeycloackApi i frontend (`ng serve`) -pmpk-app.
+4. Zaloguj się kontem testowym.
+5. Sprawdź dostępne funkcjonalności.
+6. Możesz zacząć rozwijać nowe funkcje lub poprawiać błędy.
 
 
 
