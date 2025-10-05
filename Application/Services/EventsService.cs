@@ -2,7 +2,6 @@
 using Application.Interfaces;
 using Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Models.Domain;
 using Models.DTOs;
 
@@ -24,6 +23,15 @@ namespace Application.Services
                 .Include(e => e.Address)
                 .Include(e => e.Organization).ThenInclude(o => o.User)
                 .Include(e => e.UserEvents).ThenInclude(ue => ue.User)
+                .ToListAsync();
+
+            return events.Select(e => e.ToDto()).ToList();
+        }
+        public async Task<ICollection<EventDto>> GetAllUserEventsAsync(Guid userId)
+        {
+            var userEventsGuids = _context.UsersEvents.Where(x => x.UserGuid == userId).Select(x => x.EventGuid);
+            var events = await _context.Events.Where(x => !x.Closed && userEventsGuids.Contains(x.Guid))
+                .Include(e => e.Address)
                 .ToListAsync();
 
             return events.Select(e => e.ToDto()).ToList();

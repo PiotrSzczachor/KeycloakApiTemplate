@@ -27,6 +27,21 @@ namespace KeycloakApiTemplate.Controllers
             return Ok(offers);
         }
 
+        [HttpGet("user")]
+        [ProducesResponseType(typeof(ICollection<EventDto>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetAllUserEvents()
+        {
+            var claims = HttpContext.User.Claims;
+            var userGuid = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+            var userRole = claims.FirstOrDefault(x => x.Type == ClaimTypes.Role)?.Value;
+            if (userGuid == null || userRole == null)
+            {
+                return Forbid();
+            }
+            var offers = await _eventsService.GetAllUserEventsAsync(new Guid(userGuid));
+            return Ok(offers);
+        }
+
         [HttpGet("organizer/{organizerId:guid}")]
         [ProducesResponseType(typeof(List<EventDto>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetOrganizerEvents(Guid organizerId)

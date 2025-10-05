@@ -12,5 +12,6 @@ namespace Application.Interfaces
         Task<EventDto> GetEventDetailsAsync(Guid eventId);
         Task<bool> AssignUserToEventAsync(PatchUserStatusEventDto dto);
         Task<bool> UpdateUserStatusAsync(PatchUserStatusEventDto dto);
+        Task<ICollection<EventDto>> GetAllUserEventsAsync(Guid userId);
     }
 }
