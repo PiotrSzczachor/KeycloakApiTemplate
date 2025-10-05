@@ -24,7 +24,7 @@ namespace KeycloakApiTemplate.Controllers
         public async Task<IActionResult> GetAllEvents()
         {
             var offers = await _eventsService.GetAllEventsAsync();
-            return Ok();
+            return Ok(offers);
         }
 
         [HttpGet("organizer/{organizerId:guid}")]
