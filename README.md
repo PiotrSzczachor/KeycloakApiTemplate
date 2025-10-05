@@ -17,11 +17,6 @@
 ---
 ---
 
-
-
-
-
-
 # 🏙️ Krakowskie Cyfrowe Centrum Wolontariatu (Krakow Digital Volunteer Center)
 
 ## 📚 Spis treści
@@ -33,10 +28,9 @@
 5. Baza danych / model danych
 6. API (OpenAPI / Swagger)
 7. Uruchomienie lokalne
-8. CI/CD i wdrożenia
-9. Bezpieczeństwo i prywatność
+8. Bezpieczeństwo i prywatność
 10. Testowanie
-11. Contributing / Onboarding
+12. Contributing / Onboarding
 
 
 # 1. Opis projektu
@@ -193,6 +187,19 @@ Warstwa `Application` nie ma bezpośredniego dostępu do bazy danych — korzyst
 Odpowiada za **dostęp do danych** i komunikację z bazą PostgreSQL.  
 Zawiera ApplicationDbContext, które implementują operacje na obsługuje zestawy danych oraz migracje.  
 
+### **Models**
+Zawiera definicje **encji (models / entities)** odwzorowujących tabele w bazie danych PostgreSQL.  
+Każdy model odpowiada konkretnej tabeli i zawiera właściwości opisujące jej kolumny oraz relacje między encjami.  
+Modele są używane przez Entity Framework Core do generowania i utrzymania schematu bazy danych.
+
+**Przykład:**  
+- `User`  
+- `School`  
+- `Organization`  
+- `Event`  
+- `Address`
+
+
 
 
 
@@ -205,8 +212,8 @@ Aplikacja działa jako **SPA**, komunikując się z backendem wyłącznie poprze
 
 - Zastosowanie **Angular Signals** do zarządzania stanem aplikacji w sposób reaktywny i wydajny.  
 - Integracja z **Keycloak** – pełna obsługa logowania, wylogowania i odświeżania tokenów JWT.  
-- Modułowa struktura aplikacji z wyraźnym podziałem na funkcjonalności (Wolontariusz, Organizacja, Koordynator).  
-- Responsywność i zgodność z identyfikacją wizualną programu **„Młody Kraków”**.  
+- Zastosowanie standalone komponentow umożliwiających pominięcie obsługi modułów
+- Responsywność i zgodność z identyfikacją wizualną programu.  
 
 
 ---
@@ -216,9 +223,63 @@ Aplikacja działa jako **SPA**, komunikując się z backendem wyłącznie poprze
 System korzysta z relacyjnej bazy danych **PostgreSQL**, w której zastosowano odpowiednie relacje pomiędzy encjami.  
 Model danych został zaprojektowany tak, aby odzwierciedlał rzeczywiste powiązania pomiędzy użytkownikami, szkołami, organizacjami i wydarzeniami.
 
-### 🧱 Główne modele danych
+## 6. API (OpenAPI / Swagger)
 
+Aplikacja backendowa została wyposażona w pełną dokumentację API w standardzie **OpenAPI 3.0**, generowaną automatycznie przy użyciu **Swagger UI**.
 
+Dzięki temu możliwe jest:
+- łatwe **testowanie endpointów** bezpośrednio z poziomu przeglądarki,
+- szybkie **poznanie struktury dostępnych zasobów**,
+- automatyczne **generowanie klienta API** (np. dla Angulara, Reacta lub Postmana),
+- pełna **spójność dokumentacji z kodem źródłowym**.
+## 7. Uruchomienie lokalne
+
+Projekt można uruchomić lokalnie w środowisku developerskim przy użyciu **.NET 8.0** (backend) oraz **Angular 20** (frontend).  
+System został zaprojektowany tak, aby umożliwiać łatwe dostosowanie konfiguracji – zwłaszcza w zakresie autoryzacji przez **Keycloak** i generowania kont testowych.
+
+---
+
+### ⚙️ Wymagania wstępne
+Aby uruchomić projekt lokalnie, wymagane są:
+- **.NET SDK 8.0**
+- **Node.js 20+**
+- **Angular CLI 20**
+- **PostgreSQL** (lokalna baza danych)
+- **Keycloak** (serwer autoryzacji)
+
+---
+
+### 🧩 Konfiguracja Keycloak
+Aplikacja wykorzystuje **Keycloak** jako centralny serwer uwierzytelniania i autoryzacji. Za pomocą plików konfiguracyjnych mamy możliwość skonfigurowania działania systemu autorayzacji dla użytkowników.
+
+## 8. Bezpieczeństwo i prywatność
+
+System Krakowskiego Cyfrowego Centrum Wolontariatu został zaprojektowany z myślą o **maksymalnym bezpieczeństwie danych użytkowników** oraz pełnej **zgodności z RODO**.  
+Priorytetem projektu jest ochrona informacji osobistych młodzieży, szkół i organizacji.
+
+---
+
+### 🔐 Autoryzacja i zarządzanie tożsamością – **Keycloak**
+
+Aplikacja wykorzystuje **Keycloak** jako centralny komponent uwierzytelniania i autoryzacji (IAM – *Identity and Access Management*).
+
+#### Główne funkcje integracji:
+- **OpenID Connect / OAuth2.0** – nowoczesne i bezpieczne protokoły autoryzacji.  
+- **Tokeny JWT (JSON Web Token)** – wszystkie żądania do API są weryfikowane przy użyciu podpisanych tokenów JWT.  
+- **Role i grupy** – dostęp do zasobów systemu jest kontrolowany na podstawie roli użytkownika:  
+  - `Volunteer` – wolontariusz  
+  - `Organization` – przedstawiciel organizacji  
+  - `Coordinator` – szkolny koordynator wolontariatu  
+  - `Admin` – administrator systemu  
+- **Single Sign-On (SSO)** – jedno logowanie daje dostęp do całej platformy (frontend + backend).  
+- **Bezpieczne wylogowanie** – zakończenie sesji w Keycloak automatycznie unieważnia tokeny JWT.  
+- **Obsługa polityk haseł** – wymuszenie silnych haseł, rotacji i wymiany tymczasowych haseł przy pierwszym logowaniu.
+
+#### 🔄 Odświeżanie tokenów
+Frontend (Angular 20) automatycznie odświeża token JWT przed jego wygaśnięciem, co zapewnia bezpieczeństwo sesji bez konieczności ponownego logowania użytkownika.
+
+#### 🔏 Przechowywanie tokenów
+Tokeny JWT są przechowywane wyłącznie w **pamięci sesji przeglądarki (sessionStorage)**, dzięki czemu nie są dostępne dla innych aplikacji ani skryptów.
 
 
 
