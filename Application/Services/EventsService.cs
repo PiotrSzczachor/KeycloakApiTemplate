@@ -12,9 +12,10 @@ namespace Application.Services
     {
         private readonly AppDbContext _context;
         private readonly IAddressesService _addressesService;
-        public EventsService(AppDbContext context)
+        public EventsService(AppDbContext context, IAddressesService addressesService)
         {
             _context = context;
+            _addressesService = addressesService;
         }
 
         public async Task<List<EventDto>> GetAllEventsAsync()

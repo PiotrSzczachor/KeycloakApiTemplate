@@ -8,5 +8,7 @@ namespace Application.Interfaces
         Task<OrganizationDto?> GetAsync(Guid guid);
         Task<ICollection<OrganizationDto>> GetAllAsync();
         Task<ICollection<EventDto>> GetEventsAsync(Guid organizationGuid);
+        Task<Guid> AssignUserAsync(Guid organizationId, Guid userId);
+
     }
 }

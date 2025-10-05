@@ -14,6 +14,20 @@ namespace Application.Services
         {
             _dbContext = dbContext;
         }
+
+        public async Task<Guid> AssignUserAsync(Guid organizationId, Guid userId)
+        {
+            var organization = await _dbContext.Organizations.FirstOrDefaultAsync(o => o.Guid == organizationId);
+            if (organization == null)
+            {
+                throw new InvalidDataException();
+            }
+            organization.UserGuid = userId;
+            _dbContext.Update(organization);
+            await _dbContext.SaveChangesAsync();
+            return organization.Guid;
+        }
+
         public async Task<Guid> CreateAsync(string name)
         {
             var newOrganization = new Organization

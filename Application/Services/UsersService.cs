@@ -55,6 +55,8 @@ namespace Application.Services
                     IsAdult = IsAdult(dateOfBirth)
                 };
 
+                Guid organizationId = Guid.Empty;
+
                 switch (role)
                 {
                     case Roles.Coordinator:
@@ -65,14 +67,19 @@ namespace Application.Services
                         }
                     case Roles.Organization:
                         {
-                            var organizationGuid = await _organizationsService.CreateAsync(name);
-                            newUser.OrganizationGuid = organizationGuid;
+                            organizationId = await _organizationsService.CreateAsync(name);
+                            newUser.OrganizationGuid = organizationId;
                             break;
                         }
                 }
 
                 _dbContext.Users.Add(newUser);
                 await _dbContext.SaveChangesAsync();
+
+                if(role == Roles.Organization)
+                {
+                    await _organizationsService.AssignUserAsync(organizationId, keycloakId);
+                }
 
                 await transaction.CommitAsync();
                 return newUser.Guid;
